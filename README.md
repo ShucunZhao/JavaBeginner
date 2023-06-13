@@ -1,2 +1,2 @@
 # JavaBeginner
-Some basic about java.
+Some basic knowledge about java.
