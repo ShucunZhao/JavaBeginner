@@ -22,5 +22,8 @@ public class MyInteger{
 		MyInteger a = MyInteger.valueOf(100);
 		MyInteger b = MyInteger.valueOf(100);
 		System.out.println(a==b);
+		MyInteger c = MyInteger.valueOf(3000);
+		MyInteger d = MyInteger.valueOf(3000);
+		System.out.println(c==d);
 	}
 }
