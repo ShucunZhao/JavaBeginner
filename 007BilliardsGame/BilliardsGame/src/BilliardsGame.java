@@ -1,6 +1,6 @@
 import java.awt.*;
 import javax.swing.*;
-public class BilliardsGame extends JFrame{
+public class BilliardsGame extends Object{
 
     //Load the images from img folder.
     Image ball = Toolkit.getDefaultToolkit().getImage("img/ball.png");
