@@ -1,0 +1,101 @@
+public class LinkedListImplement<E>{
+	private Node<E> head;
+	private Node<E> tail;
+	private int size;
+	public static void main(String[] args){
+		LinkedListImplement<String> list = new LinkedListImplement<>();
+		list.add("a");
+		list.add("b");
+		list.add("c");
+		System.out.println(list);
+		System.out.println("----------------------");
+		for(int i=0;i<list.size();i++){
+			System.out.println(list.get(i));	
+		}
+		System.out.println("----------------------");
+		list.remove(2);	
+		System.out.println(list);
+	}
+	class Node<E>{
+		private E val;
+		private Node<E> pre;
+		private Node<E> next;
+		public Node(E In, Node<E> pre, Node<E> next){
+			this.val = In;
+			this.pre = pre;
+			this.next = next;
+		}
+	}
+	
+	public void remove(E In){
+		Node<E> cur = head;
+
+	}
+	
+	public void remove(int i){
+		if(i<0||i>=size){
+			throw new RuntimeException("Invalid index: "+i);
+		}
+		if(i==0){
+			head.next.pre = null;
+			head = head.next;
+		}
+		else{
+			i--;
+			Node<E> cur = head;
+			while(i>0){
+				cur = cur.next;
+				i--;
+			}
+			cur.next.next.pre = cur;
+			cur.next= cur.next.next;
+		}
+		size--;
+		if(size==0) tail = null;
+	}
+	
+	public int size(){
+		return this.size;
+	}
+
+	public E get(int i){
+		if(i<0||i>=size){
+			throw new RuntimeException("Invalid index: "+i);
+		}
+		Node<E> cur = head;
+		while(i>0){
+			cur = cur.next;
+			i--;
+		}
+		return cur.val;
+	}
+	
+	public void add(E In){
+		Node<E> node = new Node<E>(In,null,null);
+		if(head==null){
+			head = node;
+			tail = node;
+		}
+		else{
+			node.pre = tail;
+			tail.next = node;
+			tail = node;
+		}
+		size++;
+	}
+	
+	@Override 
+	public String toString(){
+		StringBuilder sb = new StringBuilder();
+		sb.append("[");
+		Node<E> cur = head;
+		while(cur!=null){
+			sb.append(cur.val+",");
+			cur = cur.next;
+		}
+		sb.setCharAt(sb.length()-1, ']');
+		//System.out.println(head);
+		return sb.toString();
+	}
+	
+}
