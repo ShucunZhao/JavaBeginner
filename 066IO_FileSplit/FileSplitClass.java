@@ -1,22 +1,50 @@
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.io.IOException;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
   * RandomAccessFile
   */
-public class FileSplit{
-	public static void main(String[] args) throws IOException{
-		//How many blocks we split
-		String srcPath = "ball.png";
-		File src = new File(srcPath);
+public class FileSplitClass{
+	//Source:
+	private File src;
+	//Destination(directory):
+	private String destDir;
+	//All store paths after spliting:
+	private List<String> destPaths;
+	//Size of each block:
+	private int blockSize;
+	//The number of blocks:
+	private int size;
+
+	public FileSplitClass(String srcPath,String destDir,int blockSize){
+		this.src = new File(srcPath);
+		this.destDir = destDir;
+		this.blockSize = blockSize;
+		this.destPaths = new ArrayList<String>();
+
+		//Initialization
+		init();
+	}
+
+	private void init(){
 		//Total length:
-		long len = src.length();
+		long len = this.src.length();
 		//The size of each block
-		int blockSize = 1024;
+		//int blockSize = 1024;
 		//How many block
-		int size = (int)Math.ceil(len*1.0/blockSize);	 
-		System.out.println("size: "+size);
+		this.size = (int)Math.ceil(len*1.0/blockSize);	 
+		//System.out.println("size: "+size);
+		//Calculate the path.
+		for(int i=0;i<size;i++){
+			this.destPaths.add(this.destDir+"/"+i+"-"+this.src.getName());
+		}
+	}
+
+	public void split()throws IOException{
+		long len = src.length();
 		int beginPos = 0;
 		int needSize = (int)(blockSize>len?len:blockSize);
 		for(int i=0;i<size;i++){
@@ -30,8 +58,15 @@ public class FileSplit{
 			}
 			System.out.println("No."+i+" block, beginPos:"+beginPos+", actualSize:"+needSize);
 			//readNeedSizeFromPos(i, beginPos, needSize, "FileSplit.java");
-			readNeedSizeFromPos(i, beginPos, needSize, srcPath);
+			splitNeedSizeFromPos(i, beginPos, needSize);
 		}
+	}
+
+	public static void main(String[] args) throws IOException{
+		
+		FileSplitClass fsc = new FileSplitClass("ball.png", "dest", 1024);
+		fsc.split();
+
 		//readFromPos(2, "test1.txt");
 		//readNeedSizeFromPos(2, 3, "test1.txt");
 		/*
@@ -59,9 +94,9 @@ public class FileSplit{
 		*/
 	}
 	
-	public static void readNeedSizeFromPos(int i, int pos, int needSize, String srcIn)throws IOException{	
-		RandomAccessFile raf = new RandomAccessFile(new File(srcIn), "r");
-		RandomAccessFile raf2 = new RandomAccessFile(new File("dest/"+i+srcIn), "rw");	
+	private void splitNeedSizeFromPos(int i, int pos, int needSize)throws IOException{	
+		RandomAccessFile raf = new RandomAccessFile(this.src, "r");
+		RandomAccessFile raf2 = new RandomAccessFile(this.destPaths.get(i), "rw");	
 		//int beginPos = 2;//Start position
 		//int needSize = 3;//The actual size we need.
 		//Randomly read:
